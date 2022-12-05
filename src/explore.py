@@ -18,17 +18,20 @@ def get_unique(data):
 		print()
 
 
-def get_outlier_count(data, lower_percentile=25, upper_percentile=75):
+
+def print_outlier_count(data, lower_percentile=25, upper_percentile=75):
 	'''
-	Get number of outliers for each column.
-	Outliers are values outside of the interquantile range.
+	Print number of outliers for each column in given dataframe.
+	Outliers are defined as values outside of the interquantile range.
 
 	Args:
+		lower_percentile: The lower percentile
+		upper_percentile: The upper percentile
 		data: Dataframe where to look for outliers
 	Return:
 		Dictionary with columnname as key and number of outliers as value
 	'''
-	d  = {}
+	n = len(max(data.columns, key=len))
 
 	for col in data.select_dtypes(np.number).columns:
 		iqr = np.percentile(data[col], upper_percentile) - np.percentile(data[col], lower_percentile)
@@ -37,9 +40,10 @@ def get_outlier_count(data, lower_percentile=25, upper_percentile=75):
 		n_outliers  = data[(data[col] < lower_limit) | (data[col] > upper_limit)].shape[0]
 
 		if n_outliers > 0:
-			d[col] = n_outliers
-	return d
-
+		        perc = round(n_outliers * (100.0/len(data)), 2)
+		        print(f'\x1b[1;31m{col:<{n}}\x1b[0m : {n_outliers} ({perc}%)')
+		else:
+		        print(f'\x1b[37m{col:<{n}}\x1b[0m : none')
 
 def print_nan_percentage(data):
 	'''
