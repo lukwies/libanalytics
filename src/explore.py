@@ -39,3 +39,18 @@ def get_outlier_count(data, lower_percentile=25, upper_percentile=75):
 		if n_outliers > 0:
 			d[col] = n_outliers
 	return d
+
+
+def print_nan_percentage(data):
+	'''
+	Print percentage of Nan values in each column
+	in given pandas dataframe.
+	'''
+
+	n = len(max(data.columns, key=len))
+	for col in data.columns:
+		pnan = round(data[col].isna().sum() * (100.0/len(data)), 2)
+		if pnan > 0.00:
+			print(f'\x1b[1;31m{col:<{n}}\x1b[0m : {pnan}%')
+		else:
+			print(f'\x1b[37m{col:<{n}}\x1b[0m : 0%')
