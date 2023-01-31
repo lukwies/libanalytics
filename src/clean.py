@@ -21,9 +21,10 @@ def normalize_column_names(columns):
 	norm_columns = []
 
 	for col in columns:
-		colstr = re.sub('\(.*\)', '', col)
-		colstr = colstr.strip().lower().replace(' ', '_')
-		norm_columns.append(colstr)
+		col = re.sub('([a-z])([A-Z])', r'\1_\2', col)
+		col = col.strip().lower().replace(' ', '_')
+		col = re.sub('[^\w_]', r'', col)
+		norm_columns.append(col)
 
 	return norm_columns
 
